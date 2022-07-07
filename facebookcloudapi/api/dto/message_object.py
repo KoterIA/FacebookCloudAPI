@@ -1,16 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import Enum
-
-
-class MessageType(Enum):
-    TEXT = "text"
-    IMAGE = "image"
-    AUDIO = "audio"
-    DOCUMENT = "document"
-    TEMPLATE = "template"
-    HSM = "hsm"
+from facebookcloudapi.api.dto.types.message_type import MessageType
 
 
 @dataclass
