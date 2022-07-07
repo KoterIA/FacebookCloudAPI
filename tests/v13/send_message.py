@@ -1,7 +1,8 @@
 import unittest, os
 
-from facebookcloudapi.api.dto import (TextObject, ContactObject, MessageObject, InteractiveObject, LocationObject)
-from facebookcloudapi.api.dto.types import (MessageType, ContactType, InteractiveType, HeaderType)
+from facebookcloudapi.api.dto import (TextObject, ContactObject, MessageObject, InteractiveObject, LocationObject,
+                                      TemplateObject)
+from facebookcloudapi.api.dto.types import (MessageType, InteractiveType, HeaderType)
 from facebookcloudapi.api.dto.inherited import (NameObject, ActionObject, BodyObject, ButtonObject, HeaderObject,
                                                 FooterObject, SectionObject, RowObject)
 from facebookcloudapi.api.version_v13_0 import API
@@ -120,10 +121,25 @@ class TestSendMessage(unittest.TestCase):
                 longitude="-40.0715"
             )
         )
-        print(response.json())
         self.assertIs(response.status_code, 200)
         response.close()
 
+    def test_send_template(self):
+        response = self.api.send_template(
+            from_number_id=os.getenv('FACEBOOK_CLOUD_TEST_NUMBER_ID'),
+            message_object=MessageObject(
+                message_type=MessageType.TEMPLATE,
+                to=os.getenv('FACEBOOK_CLOUD_TEST_TO')
+            ),
+            object_data=TemplateObject(
+                name="hello_world",
+                language={
+                    "code": "en_US"
+                }
+            )
+        )
+        self.assertIs(response.status_code, 200)
+        response.close()
 
 
 if __name__ == '__main__':

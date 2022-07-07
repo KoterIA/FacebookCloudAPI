@@ -1,12 +1,5 @@
 from __future__ import annotations
-from datetime import date
-from typing import List
 from dataclasses import dataclass
-from facebookcloudapi.api.dto.inherited import (
-    ActionObject, BodyObject, FooterObject, HeaderObject
-)
-from facebookcloudapi.api.dto.types import InteractiveType
-
 from facebookcloudapi.utils import clean_dict
 
 
