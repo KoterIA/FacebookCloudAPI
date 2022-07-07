@@ -10,4 +10,5 @@ class MessageType(Enum):
     HSM = "hsm"
     CONTACTS = "contacts"
     INTERACTIVE = "interactive"
+    LOCATION = "location"
 

@@ -1,8 +1,9 @@
 import unittest, os
 
-from facebookcloudapi.api.dto import (TextObject, ContactObject, MessageObject, InteractiveObject)
+from facebookcloudapi.api.dto import (TextObject, ContactObject, MessageObject, InteractiveObject, LocationObject)
 from facebookcloudapi.api.dto.types import (MessageType, ContactType, InteractiveType, HeaderType)
-from facebookcloudapi.api.dto.inherited import (NameObject, ActionObject, BodyObject, ButtonObject, HeaderObject, FooterObject, SectionObject , RowObject)
+from facebookcloudapi.api.dto.inherited import (NameObject, ActionObject, BodyObject, ButtonObject, HeaderObject,
+                                                FooterObject, SectionObject, RowObject)
 from facebookcloudapi.api.version_v13_0 import API
 
 
@@ -87,7 +88,8 @@ class TestSendMessage(unittest.TestCase):
                     button="Button Text",
                     sections=[
                         SectionObject(title="Section 01", rows=[
-                            RowObject(row_id="SECTION_1_ROW_1_ID", row_title="SECTION_1_ROW_1_TITLE", row_description="SECTION_1_ROW_1_DESCRIPTION"),
+                            RowObject(row_id="SECTION_1_ROW_1_ID", row_title="SECTION_1_ROW_1_TITLE",
+                                      row_description="SECTION_1_ROW_1_DESCRIPTION"),
                             RowObject(row_id="SECTION_1_ROW_2_ID", row_title="SECTION_1_ROW_2_TITLE",
                                       row_description="SECTION_1_ROW_2_DESCRIPTION"),
                         ]),
@@ -103,10 +105,24 @@ class TestSendMessage(unittest.TestCase):
 
             )
         )
-        print(response.json())
         self.assertIs(response.status_code, 200)
         response.close()
 
+    def test_send_location(self):
+        response = self.api.send_location(
+            from_number_id=os.getenv('FACEBOOK_CLOUD_TEST_NUMBER_ID'),
+            message_object=MessageObject(
+                message_type=MessageType.LOCATION,
+                to=os.getenv('FACEBOOK_CLOUD_TEST_TO')
+            ),
+            object_data=LocationObject(
+                latitude="-19.3909",
+                longitude="-40.0715"
+            )
+        )
+        print(response.json())
+        self.assertIs(response.status_code, 200)
+        response.close()
 
 
 
