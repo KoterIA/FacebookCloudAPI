@@ -5,14 +5,14 @@ from typing import List
 from requests import Session, Response
 from facebookcloudapi.api.abstract import APIAbstract
 from facebookcloudapi.api.dto.message_object import MessageObject, MessageType
-from facebookcloudapi.api.dto import (TextObject, ContactObject)
+from facebookcloudapi.api.dto import (TextObject, ContactObject, InteractiveObject, LocationObject)
 
 
 class API(APIAbstract):
     version = "v13.0"
 
     def send_message_object(self, from_number_id: str, message_object: MessageObject,
-                            object_data: TextObject | List[ContactObject],
+                            object_data: TextObject | List[ContactObject] | InteractiveObject | LocationObject,
                             messaging_product="whatsapp") -> Response:
         url = f"{self.api_url}/{from_number_id}/messages"
         object_data_parse = None
@@ -48,6 +48,24 @@ class API(APIAbstract):
 
     def send_contact(self, from_number_id: str, message_object: MessageObject, object_data: List[ContactObject],
                      messaging_product="whatsapp") -> Response:
+        return self.send_message_object(
+            from_number_id=from_number_id,
+            message_object=message_object,
+            object_data=object_data,
+            messaging_product=messaging_product
+        )
+
+    def send_interactive(self, from_number_id: str, message_object: MessageObject, object_data: InteractiveObject,
+                         messaging_product="whatsapp") -> Response:
+        return self.send_message_object(
+            from_number_id=from_number_id,
+            message_object=message_object,
+            object_data=object_data,
+            messaging_product=messaging_product
+        )
+
+    def send_location(self, from_number_id: str, message_object: MessageObject, object_data: LocationObject,
+                      messaging_product="whatsapp"):
         return self.send_message_object(
             from_number_id=from_number_id,
             message_object=message_object,

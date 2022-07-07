@@ -9,4 +9,5 @@ class MessageType(Enum):
     TEMPLATE = "template"
     HSM = "hsm"
     CONTACTS = "contacts"
+    INTERACTIVE = "interactive"
 
