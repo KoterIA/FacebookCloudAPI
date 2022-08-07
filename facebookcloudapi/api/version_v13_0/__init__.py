@@ -17,12 +17,14 @@ class API(APIAbstract):
         params = {'limit': limit, 'after': after, 'before': before}
         params = {k: v for k, v in params.items() if v}
         response = self.session.get(url, params=params)
+        self.before_process_response(response)
         yield response
         cursors = response.json().get('paging', {}).get('cursors', {})
 
         while 'after' in cursors and len(response.json().get('data', [])):
             params['after'] = cursors["after"]
             response = self.session.get(url, params=params)
+            self.before_process_response(response)
             response_json = response.json()
             if len(response_json.get('data', [])):
                 yield response
@@ -52,52 +54,64 @@ class API(APIAbstract):
         if message_object.recipient_type:
             data["recipient_type"] = message_object.recipient_type
 
-        return self.session.post(
+        response = self.session.post(
             url=url,
             json=data
         )
+        self.before_process_response(response)
+        return response
 
     def send_message(self, from_number_id: str, message_object: MessageObject, object_data: TextObject,
                      messaging_product="whatsapp") -> Response:
-        return self.send_message_object(
+        response = self.send_message_object(
             from_number_id=from_number_id,
             message_object=message_object,
             object_data=object_data,
             messaging_product=messaging_product
         )
+        self.before_process_response(response)
+        return response
 
     def send_contact(self, from_number_id: str, message_object: MessageObject, object_data: List[ContactObject],
                      messaging_product="whatsapp") -> Response:
-        return self.send_message_object(
+        response = self.send_message_object(
             from_number_id=from_number_id,
             message_object=message_object,
             object_data=object_data,
             messaging_product=messaging_product
         )
+        self.before_process_response(response)
+        return response
 
     def send_interactive(self, from_number_id: str, message_object: MessageObject, object_data: InteractiveObject,
                          messaging_product="whatsapp") -> Response:
-        return self.send_message_object(
+        response = self.send_message_object(
             from_number_id=from_number_id,
             message_object=message_object,
             object_data=object_data,
             messaging_product=messaging_product
         )
+        self.before_process_response(response)
+        return response
 
     def send_location(self, from_number_id: str, message_object: MessageObject, object_data: LocationObject,
                       messaging_product="whatsapp"):
-        return self.send_message_object(
+        response = self.send_message_object(
             from_number_id=from_number_id,
             message_object=message_object,
             object_data=object_data,
             messaging_product=messaging_product
         )
+        self.before_process_response(response)
+        return response
 
     def send_template(self, from_number_id: str, message_object: MessageObject, object_data: TemplateObject,
                       messaging_product="whatsapp") -> Response:
-        return self.send_message_object(
+        response = self.send_message_object(
             from_number_id=from_number_id,
             message_object=message_object,
             object_data=object_data,
             messaging_product=messaging_product
         )
+        self.before_process_response(response)
+        return response
