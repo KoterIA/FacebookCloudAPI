@@ -80,7 +80,7 @@ class APIAbstract:
     def get_phone_status(self, phone_id: str, fields: list = None) -> Response:
         if fields is None:
             fields = ['id', 'account_mode', 'certificate', 'code_verification_status', 'display_phone_number',
-                      'is_pin_enabled', 'name_status', 'new_certificate', 'new_name_status', 'quality_score', 'status']
+                      'is_pin_enabled', 'name_status', 'new_certificate', 'new_name_status', 'quality_score', 'status', 'quality_rating']
         url = f"https://graph.facebook.com/v14.0/{phone_id}?fields={','.join(fields)}"
         with self.session.get(url) as handler:
             self.before_process_response(handler)
