@@ -36,6 +36,12 @@ class APIAbstract:
     def start_session(self):
         self.__session = Session()
 
+    # Message Templates
+    def get_message_models(self, account_id: str, after: str = None, before: str = None) -> Response:
+        raise NotImplementedError('This function is not implemented in this class or version.'
+                                  'Try on a different version.')
+
+    # Send Actions
     def send_message_object(self, from_number_id: str, message_object: MessageObject,
                             object_data: TextObject | ContactObject | InteractiveObject | LocationObject | TemplateObject,
                             messaging_product="whatsapp") -> Response:

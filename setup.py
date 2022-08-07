@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="facebookcloudapi",
-    version="0.0.3",
+    version="0.0.4",
     author="Henrique da Silva Santos",
     author_email="henrique.santos@4u360.com.br",
     description="Integration SDK for Facebook / Meta Cloud API",
@@ -19,6 +19,7 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3"
     ],
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=("tests",)),
+    include_package_data=True,
     python_requires=">=3.8"
 )

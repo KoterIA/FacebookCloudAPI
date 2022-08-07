@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import List
+from typing import List, Iterator
 from requests import Session, Response
 from facebookcloudapi.api.abstract import APIAbstract
 from facebookcloudapi.api.dto.message_object import MessageObject, MessageType
@@ -11,8 +11,28 @@ from facebookcloudapi.api.dto import (TextObject, ContactObject, InteractiveObje
 class API(APIAbstract):
     version = "v13.0"
 
+    def get_message_models(self, account_id: str, limit: int = 3, after: str = None, before: str = None) -> Iterator[
+        Response]:
+        url = f"{self.api_url}/{account_id}/message_templates"
+        params = {'limit': limit, 'after': after, 'before': before}
+        params = {k: v for k, v in params.items() if v}
+        response = self.session.get(url, params=params)
+        yield response
+        cursors = response.json().get('paging', {}).get('cursors', {})
+
+        while 'after' in cursors and len(response.json().get('data', [])):
+            params['after'] = cursors["after"]
+            response = self.session.get(url, params=params)
+            response_json = response.json()
+            if len(response_json.get('data', [])):
+                yield response
+                cursors = response_json.get('paging', {}).get('cursors', {})
+            else:
+                break
+
     def send_message_object(self, from_number_id: str, message_object: MessageObject,
-                            object_data: TextObject | List[ContactObject] | InteractiveObject | LocationObject | TemplateObject,
+                            object_data: TextObject | List[
+                                ContactObject] | InteractiveObject | LocationObject | TemplateObject,
                             messaging_product="whatsapp") -> Response:
         url = f"{self.api_url}/{from_number_id}/messages"
         object_data_parse = None
