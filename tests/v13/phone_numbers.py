@@ -16,6 +16,7 @@ class TestPhoneNumbers(unittest.TestCase):
         responses = self.api.get_phone_numbers(account_id=os.getenv('FACEBOOK_CLOUD_TEST_ACCOUNT_ID'))
 
         for response in responses:
+            print(response.json())
             self.assertIs(response.status_code, 200)
 
 

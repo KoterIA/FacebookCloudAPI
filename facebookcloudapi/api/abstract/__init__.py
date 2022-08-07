@@ -56,8 +56,10 @@ class APIAbstract:
             self.before_process_response(handler)
             return handler
 
-    def get_phone_numbers(self, account_id: str) -> Iterator[Response]:
-        url = f"https://graph.facebook.com/v14.0/{account_id}/phone_numbers"
+    def get_phone_numbers(self, account_id: str, fields : list = None) -> Iterator[Response]:
+        if fields is None:
+            fields = ['id', 'account_mode', 'certificate', 'code_verification_status', 'display_phone_number','is_pin_enabled','name_status','new_certificate','new_name_status','quality_score','status']
+        url = f"https://graph.facebook.com/v14.0/{account_id}/phone_numbers?fields={','.join(fields)}"
         response = self.session.get(url)
         self.before_process_response(response)
         yield response
