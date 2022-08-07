@@ -77,6 +77,15 @@ class APIAbstract:
             else:
                 break
 
+    def get_phone_status(self, phone_id: str, fields: list = None) -> Response:
+        if fields is None:
+            fields = ['id', 'account_mode', 'certificate', 'code_verification_status', 'display_phone_number',
+                      'is_pin_enabled', 'name_status', 'new_certificate', 'new_name_status', 'quality_score', 'status']
+        url = f"https://graph.facebook.com/v14.0/{phone_id}?fields={','.join(fields)}"
+        with self.session.get(url) as handler:
+            self.before_process_response(handler)
+            return handler
+
     def create_qrcode_message(self, phone_id: str, prefilled_message: str, generate_qr_image: str = "SVG"):
         assert generate_qr_image.lower() in ['svg', 'png'], "generate_qr_image must be SVG or PNG"
         params = {
